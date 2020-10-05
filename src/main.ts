@@ -1,55 +1,88 @@
 
 import * as fs from 'fs';
+import { RollerCoaster } from "./Classes";
+import { GroupCache } from "./Interfaces";
 
-console.error("Reading file...");
+/**
+ *  readInput
+ *
+ *  read data input from stdin, create and return an object RollerCoaster
+**/
+function readInput(filename: string): RollerCoaster {
 
-var data = fs.readFileSync(process.argv[2], 'utf8').split('\n');
-
-var inputs: string[] = data[0].split(' ');
-
-const L: number = parseInt(inputs[0]);
-const C: number = parseInt(inputs[1]);
-const N: number = parseInt(inputs[2]);
-const pi: Array<number> = new Array<number>(N);
-
-let n_people: number = 0;
-for (let i = 0; i < N; i++) {
-    pi[i] = parseInt(data[i + 1]);
-    n_people += pi[i];
-}
-console.error("capacity : " + L);
-console.error("number of run per day : " + C);
-console.error("number of groups :" + N);
-console.error("number of people :" + n_people);
-
-
-let index: number = 0;
-let cach: Array<[number, number]> = new Array<[number, number]>(N);
-
-console.error("Start computing result...");
-
-let total: number = 0;
-let p: number = 0;
-
-for (let i = 0; i < C; i++) {
-    let charge: number = 0;
-    let firstgroup: number = index;
-    if (cach[firstgroup]) {
-        //console.error("retrieve from caching...");
-        total += cach[firstgroup][1];
-        index = cach[firstgroup][0];
-    }
-    else {
-        while (charge < n_people && charge + pi[index] <= L) {
-            charge += pi[index];
-            total += pi[index];
-            index = (index + 1 < N ? index + 1 : 0);
-        }
-        cach[firstgroup] = [index, charge];
-        ++p;        
-        //console.log("comput");
-    }
-    //console.error("current earnings : " + total);
+	let data = fs.readFileSync(filename, 'utf8').split('\n');
+	let inputs: string[] = data[0].split(' ');
+	const L: number = parseInt(inputs[0]);
+	const C: number = parseInt(inputs[1]);
+	const N: number = parseInt(inputs[2]);
+	let rc: RollerCoaster = new RollerCoaster(L, C, N);
+	for (let i = 0; i < N; i++) {
+		rc.pi[i] = parseInt(data[i + 1]);
+		rc.n_people += rc.pi[i];
+	}
+	return rc;
 }
 
-console.log("Earnings : " + total);
+/**
+ *  estimateEarnings
+ *
+ *  compute the earnings of the day given data input
+**/
+function estimateEarnings(filename: string) {
+
+	// read stdin input
+	let rc: RollerCoaster = readInput(filename);
+	// declare cache
+	let cache: Array<GroupCache> = new Array<GroupCache>(rc.N);
+	let loopDetected: boolean = false;
+	let index: number = 0;
+	let total: number = 0;
+	let i: number = 0;
+	while (i < rc.C) {
+
+		let firstgroup: number = index;
+		// we check if a group as already be first to get the earnings for this ride
+		if (cache[firstgroup]) {
+
+			/*
+			** we check if there is a loop for a given setting in roller coaster 
+			** from the head group to the next time this group is first
+			*/
+			if (!loopDetected) {
+				let n_cycles: number = i - cache[firstgroup].cycle;
+				let loopCharge: number = total - cache[firstgroup].prevTotal;
+				while (i + n_cycles < rc.C) {
+					total += loopCharge;
+					i = i + n_cycles;   	
+				}
+				loopDetected = true;
+			}
+			// else we just get the train setting for given firstgroup
+			else {
+				total += cache[firstgroup].charge;
+				index = cache[firstgroup].nextGroup;
+				++i;
+			}
+		}
+		else {
+			let charge: number = 0;
+			let prevTotal: number = total;
+			while (charge < rc.n_people && charge + rc.pi[index] <= rc.L) {
+				charge += rc.pi[index];
+				total += rc.pi[index];
+				index = (index + 1 < rc.N ? index + 1 : 0);
+			}
+			// we fill the cache to prevent computing the same setting
+			cache[firstgroup] = {
+				nextGroup: index,
+				charge: charge,
+				prevTotal: prevTotal,
+				cycle: i
+			};
+			++i;
+		}
+	}
+	console.log("Total earnings : " + total);
+}
+
+estimateEarnings(process.argv[2]);
