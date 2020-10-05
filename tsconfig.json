@@ -7,8 +7,7 @@
 		"preserveConstEnums": true,
 		"sourceMap": false,
 		"watch": false,
-		"moduleResolution": "node",
-		"noEmit": true
+		"moduleResolution": "node"
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "**/*.spec.ts"]
