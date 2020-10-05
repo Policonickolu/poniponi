@@ -26,7 +26,6 @@ for (var i = 0; i < C; i++) {
     var charge = 0;
     var firstgroup = index;
     if (cach[firstgroup]) {
-        console.error("retrieve from caching...");
         total += cach[firstgroup][1];
         index = cach[firstgroup][0];
     }
@@ -38,8 +37,6 @@ for (var i = 0; i < C; i++) {
         }
         cach[firstgroup] = [index, charge];
         ++p;
-        console.log("comput");
     }
-    console.error("current earnings : " + total);
 }
-console.log(total);
+console.log("Earnings : " + total);

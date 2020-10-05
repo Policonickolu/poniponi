@@ -35,7 +35,7 @@ for (let i = 0; i < C; i++) {
     let charge: number = 0;
     let firstgroup: number = index;
     if (cach[firstgroup]) {
-        console.error("retrieve from caching...");
+        //console.error("retrieve from caching...");
         total += cach[firstgroup][1];
         index = cach[firstgroup][0];
     }
@@ -47,9 +47,9 @@ for (let i = 0; i < C; i++) {
         }
         cach[firstgroup] = [index, charge];
         ++p;        
-        console.log("comput");
+        //console.log("comput");
     }
-    console.error("current earnings : " + total);
+    //console.error("current earnings : " + total);
 }
 
-console.log(total);
+console.log("Earnings : " + total);
