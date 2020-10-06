@@ -12,14 +12,14 @@ import { RollerCoaster } from "./Classes";
 
 let data = fs.readFileSync(process.argv[2], 'utf8').split('\n');
 let inputs: string[] = data[0].split(' ');
-const L: number = parseInt(inputs[0]);
-const C: number = parseInt(inputs[1]);
-const N: number = parseInt(inputs[2]);
+const L: bigint = BigInt(inputs[0]);
+const C: bigint = BigInt(inputs[1]);
+const N: bigint = BigInt(inputs[2]);
 
 let rc: RollerCoaster = new RollerCoaster(L, C, N);
 
 for (let i = 0; i < N; i++) {
-	rc.pi[i] = parseInt(data[i + 1]);
+	rc.pi[i] = BigInt(data[i + 1]);
 	rc.n_people += rc.pi[i];
 }
 

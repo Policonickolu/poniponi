@@ -1,7 +1,7 @@
 
 export interface GroupCache {
 	nextGroup: number;
-	charge: number;
-	prevTotal: number;
+	charge: bigint;
+	prevTotal: bigint;
 	cycle: number;
 }

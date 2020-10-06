@@ -7,15 +7,15 @@ var RollerCoaster = (function () {
         this.C = C;
         this.N = N;
         this.pi = new Array(N);
-        this.n_people = 0;
-        this.total = 0;
+        this.n_people = BigInt(0);
+        this.total = BigInt(0);
     }
     RollerCoaster.prototype.estimateEarnings = function () {
-        var cache = new Array(this.N);
+        var cache = new Array(Number(this.N));
         var loopDetected = false;
         var index = 0;
         var i = 0;
-        this.total = 0;
+        this.total = BigInt(0);
         while (i < this.C) {
             var firstgroup = index;
             if (cache[firstgroup]) {
@@ -35,7 +35,7 @@ var RollerCoaster = (function () {
                 }
             }
             else {
-                var charge = 0;
+                var charge = BigInt(0);
                 var prevTotal = this.total;
                 while (charge < this.n_people && charge + this.pi[index] <= this.L) {
                     charge += this.pi[index];
