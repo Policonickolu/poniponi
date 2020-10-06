@@ -25,5 +25,4 @@ I also check if there is a loop of trains settings, when a group is the first to
 
 For the first input file, we get 8974489271113753 which is the expected result.
 
-For the second input file, we get 89744892599970700, but 89744892714152289 was expected. 
-I didn't found what cause this gap
+For the second input file, we get 89744892714152289. I had to use bigint type to compute this kind of large interger.
