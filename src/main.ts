@@ -10,6 +10,13 @@ import { GroupCache } from "./Interfaces";
 **/
 function readInput(filename: string): RollerCoaster {
 
+	/*
+	** I need to find another way to read the filename
+	** The good practice is to read the file line by line
+	** to not overload the memory
+	** I know how to do it in C, but i'm not used to in node
+	** because I use it principaly for web developement
+	**/ 
 	let data = fs.readFileSync(filename, 'utf8').split('\n');
 	let inputs: string[] = data[0].split(' ');
 	const L: number = parseInt(inputs[0]);
